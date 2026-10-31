@@ -19,10 +19,7 @@ func main() {
 	a := app.New()
 	w := a.NewWindow("Update Time")
 
-	w.Resize(fyne.Size{
-		Width:  640,
-		Height: 300,
-	})
+	w.Resize(fyne.NewSize(640, 300))
 
 	message := widget.NewLabel("Welcome")
 	button := widget.NewButton("Update", func() {

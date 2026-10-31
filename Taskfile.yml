@@ -3,14 +3,33 @@
 version: "3"
 
 vars:
-  GREETING: Hello, world!
+  APP_ID: rest.nick.slate
+  BIN_ICON: ../../assets/slate_z.png
+  BIN_NAME: SlateHybrid
+  VERSION: 1.0.0
 
 tasks:
   dev:
     cmds:
       - go run ./cmd/slate
-  default:
-    desc: Print a greeting message
+  build:
     cmds:
-      - echo "{{.GREETING}}"
-    silent: true
+      - go build ./cmd/slate
+  bootstrap-dist:
+    cmds:
+      - mkdir -p dist
+      - mkdir -p dist/win
+    generates:
+      - dist/*
+  package:win:
+    deps:
+      - bootstrap-dist
+    cmds:
+      - fyne package -os windows -src ./cmd/slate
+        -app-id {{.APP_ID}} -name {{.BIN_NAME}} -icon {{.BIN_ICON}}
+      - mv cmd/slate/{{.BIN_NAME}}.exe dist/win/
+    generates:
+      - dist/win/*
+  package:
+    deps:
+      - package:win
