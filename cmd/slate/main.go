@@ -39,16 +39,32 @@ func (c *Application) Run() {
 		log.Println("Colour is", value)
 	}
 
+	backendBtn := widget.NewButton("Start Backend", func() {})
+	backendBtn.OnTapped = func() {
+		go func() {
+			fyne.Do(func() {
+				backendBtn.SetText("Stop Backend")
+				backendBtn.Refresh()
+			})
+
+			err = c.backend.ListenAndServe()
+			if err != nil {
+				fyne.Do(func() {
+					backendBtn.SetText("Start Backend")
+					backendBtn.Refresh()
+				})
+				log.Fatal(err)
+			}
+		}()
+	}
+
 	content := container.NewVBox(combo, widget.NewButton("Launch", func() {
 		log.Println("Content was:", combo.Text)
-	}))
+	}), backendBtn)
 
 	w.SetContent(content)
 	w.Show()
 
-	go func() {
-		log.Fatal(c.backend.ListenAndServe())
-	}()
 	c.frontend.Run()
 }
 

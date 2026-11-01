@@ -13,14 +13,12 @@ func NewBackend() *Backend {
 		_, _ = w.Write([]byte("heya!"))
 	})
 
-	r := &Backend{
+	return &Backend{
 		server: &http.Server{
 			Addr:    "localhost:8080",
 			Handler: mux,
 		},
 	}
-
-	return r
 }
 
 func (b *Backend) ListenAndServe() error {
