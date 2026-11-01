@@ -25,5 +25,5 @@ func LocateInstallation(appName string) (string, error) {
 		}
 	}
 
-	return "", fmt.Errorf("no '%s' app found in epic games launcher install manifest", appName)
+	return "", fmt.Errorf("no app '%s' found in epic games launcher install manifest", appName)
 }

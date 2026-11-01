@@ -7,19 +7,21 @@ import (
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
-	"github.com/8h9x/slate/internal/backend"
 	"github.com/8h9x/slate/internal/egl"
+	"github.com/8h9x/slate/internal/server"
 )
 
 type Application struct {
 	frontend fyne.App
-	backend  *backend.Backend
+	backend  *server.Backend
+	proxy    *server.Proxy
 }
 
 func NewApplication() *Application {
 	return &Application{
 		frontend: app.New(),
-		backend:  backend.NewBackend(),
+		backend:  server.NewBackend(),
+		proxy:    server.NewProxy(),
 	}
 }
 
@@ -60,7 +62,7 @@ func (c *Application) Run() {
 
 	content := container.NewVBox(combo, widget.NewButton("Launch", func() {
 		log.Println("Content was:", combo.Text)
-	}), backendBtn)
+	}), backendBtn, container.NewHBox(c.backend.Widget(), c.proxy.Widget()))
 
 	w.SetContent(content)
 	w.Show()

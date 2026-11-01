@@ -1,6 +1,12 @@
-package backend
+package server
 
-import "net/http"
+import (
+	"net/http"
+
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/widget"
+)
 
 type Backend struct {
 	server *http.Server
@@ -19,6 +25,13 @@ func NewBackend() *Backend {
 			Handler: mux,
 		},
 	}
+}
+
+func (b *Backend) Widget() fyne.CanvasObject {
+	return container.NewVBox(
+		widget.NewLabel("Running on port :8080"),
+		widget.NewButton("Start Server", nil),
+	)
 }
 
 func (b *Backend) ListenAndServe() error {
